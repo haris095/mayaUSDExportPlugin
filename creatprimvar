@@ -1,0 +1,31 @@
+UsdGeomPrimvar createUVPrimVar(
+    UsdGeomGprim&              primSchema,
+    const TfToken&             name,
+    const UsdTimeCode&         usdTime,
+    const VtArray<GfVec2f>&    data,
+    const TfToken&             interpolation,
+    const VtIntArray&          assignmentIndices,
+    UsdUtilsSparseValueWriter* valueWriter)
+{
+    const unsigned int numValues = data.size();
+    if (numValues == 0) {
+        return UsdGeomPrimvar();
+    }
+
+    TfToken interp = interpolation;
+    if (numValues == 1 && interp == UsdGeomTokens->constant) {
+        interp = TfToken();
+    }
+
+    SdfValueTypeName uvValueType = (UsdMayaWriteUtil::WriteUVAsFloat2())
+        ? (SdfValueTypeNames->Float2Array)
+        : (SdfValueTypeNames->TexCoord2fArray);
+
+    UsdGeomPrimvar primVar
+        = UsdGeomPrimvarsAPI(primSchema).CreatePrimvar(name, uvValueType, interp);
+
+    setPrimvar(
+        primVar, assignmentIndices, VtValue(data), VtValue(UnauthoredUV), usdTime, valueWriter);
+
+    return primVar;
+}

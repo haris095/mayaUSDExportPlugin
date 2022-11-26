@@ -1,0 +1,6 @@
+set(Qt5_DIR "D:/Creative_Applications/Qt/Qt5.12.12/5.12.12")
+set(GLEW_DIR "D:/GLEW/GLEW")
+set(GLFW_DIR "D:/GLFW/glfw-3.3.2.bin.WIN64")
+set(USD_ROOT "D:/USD")
+set(TBB_ROOT "D:/USD")
+set(BOOST_ROOT "D:/USD")
