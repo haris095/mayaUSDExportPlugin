@@ -12,6 +12,8 @@ set(MAYA_USD_LOCATION "D:/workspace/mayaUsdBuilt/install/RelWithDebInfo")
 
 SET(MAYA_USD_PYTHON_LIB_DIR "C:/Program Files/Autodesk/MayaUSD/Maya2022/0.8.0/mayausd/MayaUSD3/lib/python/mayaUsd/lib")
 
+set(XGEN_DIR "C:/Program Files/Autodesk/Maya2022/plug-ins/xgen")
+
 function(_usd_target_properties
     TARGET_NAME
 )
@@ -73,6 +75,7 @@ function(_usd_target_properties
         ${args_INCLUDE_DIRS}
         ${USD_INCLUDE_DIR}
         ${TBB_INCLUDE_DIRS}
+        ${XGEN_DIR}/include
     )
 
     include_directories(${DEP_INCLUDE_DIRS})
@@ -97,7 +100,19 @@ function(_usd_target_properties
             ${DEVKIT_LIBRARY_DIR}
             ${MAYA_USD_LOCATION}/lib
             ${MAYA_USD_PYTHON_LIB_DIR}
+            ${XGEN_DIR}/lib
     )
+
+    # xgen library load
+    set(_XGEN_LIBRARIES AdskXGen AdskXpd AdskSeExpr)
+    set(XGEN_LIB_DIR ${XGEN_DIR}/lib)
+    foreach(XGEN_LIB ${_XGEN_LIBRARIES})
+        find_library(${XGEN_LIB}_PATH NAMES ${XGEN_LIB} PATHS ${XGEN_LIB_DIR})
+        if(${XGEN_LIB}_PATH)
+            set(XGEN_LIBRARIES ${XGEN_LIBRARIES} ${${XGEN_LIB}_PATH})
+        endif()
+    endforeach(XGEN_LIB)
+    
 
     set(LIBRARY_DIRS ${LIBRARY_DIRS} ${DEVKIT_LIBRARY_DIR})
     foreach(MAYA_LIB ${LIBRARIES})
@@ -142,7 +157,7 @@ function(_usd_target_properties
 
     # Link to libraries.
     set(_LINK_LIBRARIES "")
-    list(APPEND _LINK_LIBRARIES ${args_LIBRARIES} ${TBB_LIBRARIES} ${MAYA_LIBRARIES} ${MAYAUSD_LIBRARIES})
+    list(APPEND _LINK_LIBRARIES ${args_LIBRARIES} ${TBB_LIBRARIES} ${MAYA_LIBRARIES} ${MAYAUSD_LIBRARIES} ${XGEN_LIBRARIES})
     if (ENABLE_PYTHON_SUPPORT)
         list(APPEND _LINK_LIBRARIES ${Boost_PYTHON_LIBRARY} ${PYTHON_LIBRARIES})
     endif()

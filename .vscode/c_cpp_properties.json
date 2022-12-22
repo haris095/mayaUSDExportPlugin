@@ -7,7 +7,8 @@
                 "D:/USD/include",
                 "C:/Program Files/Autodesk/Maya2022/include",
                 "D:/workspace/mayaUsdBuilt/install/RelWithDebInfo/include",
-                "D:/USD/include/boost-1_70"
+                "D:/USD/include/boost-1_70",
+                "C:/Program Files/Autodesk/Maya2022/plug-ins/xgen/include"
             ],
             "defines": [
                 "_DEBUG",
